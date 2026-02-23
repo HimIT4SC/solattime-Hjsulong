@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="th" id="html-root">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SolatTime - เวลาละหมาด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&display=swap');
+
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        html.dark body {
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        /* Mesh Gradient Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(5, 150, 105, 0.05) 0px, transparent 50%);
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .active-prayer-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white !important;
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Current Prayer Banner */
+        .current-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 10px 16px;
+            margin-bottom: 12px;
+        }
+
+        html.dark .current-banner {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .current-banner .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.7);
+            }
+        }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        /* Dark Mode Toggle Button */
+        #theme-toggle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.25s, transform 0.2s, border-color 0.25s;
+            flex-shrink: 0;
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        html.dark #theme-toggle {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* ── Responsive Layout ────────────────────────────── */
+        @media (min-width: 1024px) {
+
+            /* Stack rows vertically */
+            .layout-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+            }
+
+            /* Row 1: featured card — full width, same as prayer row */
+            .layout-left {
+                width: 100%;
+            }
+
+            /* Row 2: prayer times — all in one horizontal row */
+            .layout-right {
+                width: 100%;
+            }
+
+            #prayer-list {
+                display: flex !important;
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            /* Each prayer card fills equal width */
+            #prayer-list>* {
+                flex: 1;
+                min-width: 0;
+                margin-top: 0 !important;
+            }
+
+            /* Compact prayer cards for horizontal row */
+            #prayer-list .glass-card,
+            #prayer-list .active-prayer-card {
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center;
+                padding: 14px 8px !important;
+                gap: 8px;
+            }
+
+            #prayer-list .glass-card>div,
+            #prayer-list .active-prayer-card>div {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 6px !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="pb-8">
+    <div class="mesh-bg"></div>
+
+    <div class="max-w-5xl mx-auto px-5 pt-8">
+        <!-- Header Section -->
+        <header class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3 mb-8 animate-slide-up">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">TAQWEEM</h1>
+                <h2 id="greeting-text" class="text-slate-400 font-medium text-sm">Haji Sulong</h2>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+                <!-- Language switcher -->
+                <div class="relative">
+                    <select id="lang-select"
+                        class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full px-4 py-2 text-sm font-medium outline-none appearance-none pr-8">
+                        <option value="th">TH</option>
+                        <option value="en">ENG</option>
+                        <option value="ms">MY</option>
+                    </select>
+                    <i
+                        class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400"></i>
+                </div>
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" title="Toggle dark/light mode" aria-label="Toggle theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <!-- Location -->
+                <div class="relative">
+                    <select id="location-select"
+                        class="bg-white/50 dark:bg-slate-800/50 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-full px-4 py-2 text-sm font-medium outline-none appearance-none pr-8">
+                        <!-- Dynamic -->
+                    </select>
+                    <i
+                        class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Two-column layout for lg screens -->
+        <div class="layout-wrapper">
+
+            <!-- LEFT: Current banner + Next prayer card -->
+            <div class="layout-left">
+                <!-- Current Prayer Banner -->
+                <div id="current-prayer-banner" class="current-banner animate-slide-up hidden"
+                    style="animation-delay: 0.05s;">
+                    <span class="pulse-dot"></span>
+                    <span id="lbl-currently"
+                        class="text-[11px] font-medium text-emerald-600 dark:text-emerald-400"></span>
+                    <span id="current-prayer-label"
+                        class="text-[13px] font-bold text-slate-800 dark:text-slate-100">--</span>
+                    <span id="current-prayer-time-label"
+                        class="text-[12px] font-semibold text-emerald-500 ml-auto">--:--</span>
+                </div>
+
+                <!-- Main Featured Card (Next Prayer) -->
+                <div id="next-prayer-banner" class="glass-card p-6 mb-8 animate-slide-up"
+                    style="animation-delay: 0.1s;">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex-shrink-0">
+                            <img src="taqweem.png" alt="Taqweem" class="h-14 w-14 object-contain drop-shadow-sm">
+                        </div>
+                        <div class="ml-auto text-right">
+                            <span id="lbl-next-prayer"
+                                class="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-400"></span>
+                            <h2 id="next-prayer-name" class="text-2xl font-bold mt-1 tracking-tight">--:--</h2>
+                        </div>
+                    </div>
+
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <!-- Live current time -->
+                            <p id="live-clock"
+                                class="text-3xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">
+                                --:--:--</p>
+                            <p id="current-date-text" class="text-slate-400 text-xs mt-1">-- --- ----</p>
+                        </div>
+                        <div class="text-right flex flex-col items-end gap-2">
+                            <!-- Next prayer time (big) -->
+                            <p id="next-prayer-time"
+                                class="text-2xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">
+                                --:--</p>
+                            <!-- Countdown -->
+                            <p id="countdown-text"
+                                class="bg-emerald-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-emerald-500/20">
+                                ในอีก -- ชม. -- นาที
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Prayer List -->
+            <div class="layout-right">
+                <div class="space-y-4 animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="flex justify-between items-center px-1">
+                        <h3 id="lbl-today-schedule"
+                            class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest"></h3>
+                        <span id="lbl-unit" class="text-[10px] text-slate-400"></span>
+                    </div>
+
+                    <div id="prayer-list" class="space-y-3">
+                        <!-- Items populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end layout-wrapper -->
+
+        <!-- Info Footer -->
+        <footer class="mt-12 text-center pb-12 opacity-40 animate-slide-up" style="animation-delay: 0.3s;">
+            <p id="desc-text" class="text-[9px] mt-1"></p>
+            <p class="text-[9px] mt-1">application by IT4SC X CUCI</p>
+        </footer>
+    </div>
+
+
+    <script>
+        const prayerData = {
+            "settings": {
+                "source": "Time prayer from Patani",
+                "base_location": "Pattani",
+                "description": "Calculated by Haji Sulong Abdulkadir al-Fatani",
+                "location_configs": [
+                    { "id": "pattani", "name_en": "Pattani", "offset": 0 },
+                    { "id": "yala", "name_en": "Yala", "offset": 2 },
+                    { "id": "narathiwat", "name_en": "Narathiwat", "offset": -2 },
+                    { "id": "songkhla", "name_en": "Songkhla", "offset": 1 },
+                    { "id": "satun", "name_en": "Satun", "offset": 4 }
+                ]
+            },
+            "prayer_time": []
+        };
+
+        // Populate Mock Data for demonstration
+        for (let i = 1; i <= 31; i++) {
+            prayerData.prayer_time.push({
+                "date": i,
+                "month": "February",
+                "date-month": `${i}-2`,
+                "times": {
+                    "imsak": "05:07",
+                    "subuh": "05:17",
+                    "terbit": "06:30",
+                    "zohor": "12:30",
+                    "asar": "15:49",
+                    "maghrib": "18:29",
+                    "isyak": "19:40"
+                }
+            });
+        }
+
+        /* ── Translations ──────────────────────────────────── */
+        const T = {
+            th: {
+                greeting: ['อรุณสวัสดิ์, ยามเช้า', 'สวัสดี, ยามบ่าย', 'สวัสดี, ยามเย็น', 'อัสลามุอะลัยกุม, ยามค่ำคืน'],
+                prayerNames: { imsak: 'อิมซาก', subuh: 'ซุบฮิ', terbit: 'ชูรูก', zohor: 'ซูฮรี', asar: 'อัสรี', maghrib: 'มักริบ', isyak: 'อีซา' },
+                nextPrayer: 'ละหมาดครั้งถัดไป',
+                currently: 'กำลังอยู่ใน:',
+                inProgress: 'อยู่ในช่วงนี้',
+                endOfDay: 'สิ้นสุดของวัน',
+                inPeriod: 'กำลังอยู่ในช่วงนี้',
+                done: 'เสร็จสิ้น',
+                todaySchedule: 'ตารางวันนี้',
+                unit: 'หน่วยนาที (M)',
+                nav: ['หน้าหลัก', 'กิบลัต', 'ปฏิทิน', 'ตั้งค่า'],
+                dateLocale: 'th-TH'
+            },
+            en: {
+                greeting: ['Good Morning', 'Good Afternoon', 'Good Evening', 'Assalamualaikum'],
+                prayerNames: { imsak: 'Imsak', subuh: 'Subuh', terbit: 'Sunrise', zohor: 'Zohor', asar: 'Asar', maghrib: 'Maghrib', isyak: 'Isyak' },
+                nextPrayer: 'Next Prayer',
+                currently: 'Currently:',
+                inProgress: 'In Progress',
+                endOfDay: 'End of Day',
+                inPeriod: 'In this period',
+                done: 'Done',
+                todaySchedule: "Today's Schedule",
+                unit: 'Unit: min (M)',
+                nav: ['Home', 'Qibla', 'Calendar', 'Settings'],
+                dateLocale: 'en-GB'
+            },
+            ms: {
+                greeting: ['Selamat Pagi', 'Selamat Tengahari', 'Selamat Petang', 'Assalamualaikum'],
+                prayerNames: { imsak: 'Imsak', subuh: 'Subuh', terbit: 'Syuruk', zohor: 'Zohor', asar: 'Asar', maghrib: 'Maghrib', isyak: 'Isyak' },
+                nextPrayer: 'Waktu Seterusnya',
+                currently: 'Sedang dalam:',
+                inProgress: 'Waktu Semasa',
+                endOfDay: 'Tamat Hari Ini',
+                inPeriod: 'Dalam waktu ini',
+                done: 'Selesai',
+                todaySchedule: 'Jadual Hari Ini',
+                unit: 'Unit: minit (M)',
+                nav: ['Utama', 'Kiblat', 'Kalendar', 'Tetapan'],
+                dateLocale: 'ms-MY'
+            }
+        };
+
+        let currentLang = 'th';
+
+        function applyLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('solat-lang', lang);
+            const t = T[lang];
+
+            // Sync dropdown to current lang
+            const langSelect = document.getElementById('lang-select');
+            if (langSelect) langSelect.value = lang;
+
+            // Static labels
+            document.getElementById('lbl-next-prayer').innerText = t.nextPrayer;
+            document.getElementById('lbl-currently').innerText = t.currently;
+            document.getElementById('lbl-today-schedule').innerText = t.todaySchedule;
+            document.getElementById('lbl-unit').innerText = t.unit;
+
+
+            // Re-render prayer list with new names
+            updateUI();
+        }
+
+        function initApp() {
+            initTheme();
+
+            // Language switcher
+            const savedLang = localStorage.getItem('solat-lang') || 'th';
+            const langSelect = document.getElementById('lang-select');
+            langSelect.addEventListener('change', () => applyLang(langSelect.value));
+
+            const locSelect = document.getElementById('location-select');
+
+            // Set Data
+            document.getElementById('desc-text').innerText = prayerData.settings.description;
+
+            // Populate Locations
+            prayerData.settings.location_configs.forEach(loc => {
+                const opt = document.createElement('option');
+                opt.value = loc.offset;
+                opt.textContent = loc.name_en;
+                locSelect.appendChild(opt);
+            });
+
+            // Restore saved province
+            const savedProvince = localStorage.getItem('solat-province');
+            if (savedProvince !== null) locSelect.value = savedProvince;
+
+            // Save on change
+            locSelect.addEventListener('change', () => {
+                localStorage.setItem('solat-province', locSelect.value);
+                updateUI();
+            });
+
+            // Apply language (also calls updateUI + sets greeting)
+            applyLang(savedLang);
+
+            setInterval(updateUI, 60000);    // Rebuild list every minute
+            setInterval(tickCountdown, 1000); // Tick countdown every second
+        }
+
+        /* ── Theme Toggle ─────────────────────────────────── */
+        function initTheme() {
+            const html = document.getElementById('html-root');
+            const btn = document.getElementById('theme-toggle');
+            const icon = document.getElementById('theme-icon');
+
+            // Determine initial theme: localStorage > system preference
+            const saved = localStorage.getItem('solat-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = saved ? saved === 'dark' : prefersDark;
+
+            applyTheme(isDark);
+
+            btn.addEventListener('click', () => {
+                const nowDark = html.classList.contains('dark');
+                applyTheme(!nowDark);
+                localStorage.setItem('solat-theme', !nowDark ? 'dark' : 'light');
+            });
+
+            function applyTheme(dark) {
+                if (dark) {
+                    html.classList.add('dark');
+                    icon.textContent = '☀️';
+                    btn.title = 'Switch to light mode';
+                } else {
+                    html.classList.remove('dark');
+                    icon.textContent = '🌙';
+                    btn.title = 'Switch to dark mode';
+                }
+            }
+        }
+
+        function updateUI() {
+            const t = T[currentLang];
+            const offset = parseInt(document.getElementById('location-select').value);
+            const prayerList = document.getElementById('prayer-list');
+            const now = new Date();
+            const todayKey = `${now.getDate()}-${now.getMonth() + 1}`;
+
+            // Format Date with current language locale
+            const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('current-date-text').innerText = now.toLocaleDateString(t.dateLocale, dateOptions);
+
+            const todayData = prayerData.prayer_time.find(p => p["date-month"] === todayKey) || prayerData.prayer_time[0];
+
+            const prayerNames = t.prayerNames;
+
+            const icons = {
+                imsak: "fa-hourglass-start",
+                subuh: "fa-cloud-moon",
+                terbit: "fa-sun",
+                zohor: "fa-circle-half-stroke",
+                asar: "fa-cloud-sun",
+                maghrib: "fa-moon",
+                isyak: "fa-star-and-crescent"
+            };
+
+            prayerList.innerHTML = '';
+            const currentTotalMin = now.getHours() * 60 + now.getMinutes();
+
+            // Reset current banner
+            const currentBanner = document.getElementById('current-prayer-banner');
+            currentBanner.classList.add('hidden');
+
+            const allEntries = Object.entries(todayData.times);
+
+            // Find next prayer index (first after current time)
+            let nextIndex = allEntries.findIndex(([key, timeStr]) => {
+                const finalTime = applyOffset(timeStr, offset);
+                const [h, m] = finalTime.split(':').map(Number);
+                return (h * 60 + m) > currentTotalMin;
+            });
+
+            // Current prayer = one before next (or last if all passed)
+            let currentIndex = nextIndex === -1
+                ? allEntries.length - 1
+                : nextIndex === 0 ? -1 : nextIndex - 1;
+
+            // Special rule: Terbit (Syuruk) is only highlighted for 10 min after it begins.
+            // After that it is treated as a plain past prayer.
+            if (currentIndex >= 0 && allEntries[currentIndex][0] === 'terbit') {
+                const terbitFinal = applyOffset(allEntries[currentIndex][1], offset);
+                const [th2, tm2] = terbitFinal.split(':').map(Number);
+                if (currentTotalMin - (th2 * 60 + tm2) > 10) {
+                    currentIndex = -1;
+                }
+            }
+
+            // Populate banner & widget from current/next
+            if (currentIndex >= 0) {
+                const [curKey, curTimeStr] = allEntries[currentIndex];
+                const curTime = applyOffset(curTimeStr, offset);
+                document.getElementById('current-prayer-label').innerText = prayerNames[curKey];
+                document.getElementById('current-prayer-time-label').innerText = curTime;
+                currentBanner.classList.remove('hidden');
+            }
+            const nextEntry = nextIndex !== -1 ? allEntries[nextIndex] : null;
+            if (nextEntry) {
+                const nextFinal = applyOffset(nextEntry[1], offset);
+                const [nh, nm] = nextFinal.split(':').map(Number);
+                updateWidget(prayerNames[nextEntry[0]], nextFinal, (nh * 60 + nm) - currentTotalMin);
+            } else {
+                updateWidget(t.done, '--:--', 0);
+            }
+
+            // Render ALL entries in fixed chronological order (earliest → latest)
+            allEntries.forEach(([key, timeStr], idx) => {
+                const finalTime = applyOffset(timeStr, offset);
+                const [h, m] = finalTime.split(':').map(Number);
+                const prayerTotalMin = h * 60 + m;
+
+                const isCurrent = idx === currentIndex && currentIndex >= 0;
+                const isPast = !isCurrent && prayerTotalMin <= currentTotalMin;
+
+                const card = document.createElement('div');
+
+                if (isCurrent) {
+                    card.className = "active-prayer-card glass-card p-4 flex justify-between items-center transition-all duration-300";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20 text-white">
+                                <i class="fas ${icons[key]}"></i>
+                            </div>
+                            <div>
+                                <p class="text-[13px] font-bold text-white">${prayerNames[key]}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold tracking-tight text-white">${finalTime}</p>
+                            <p class="text-[9px] text-white/70 mt-0.5">${T[currentLang].inProgress}</p>
+                        </div>
+                    `;
+                } else {
+                    card.className = "glass-card p-4 flex justify-between items-center transition-all duration-300";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-emerald-500/5 text-emerald-500">
+                                <i class="fas ${icons[key]}"></i>
+                            </div>
+                            <div>
+                                <p class="text-[13px] font-bold text-slate-800 dark:text-slate-200">${prayerNames[key]}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold tracking-tight text-slate-700 dark:text-slate-200">${finalTime}</p>
+                        </div>
+                    `;
+                }
+                prayerList.appendChild(card);
+            });
+        }
+
+        // Stores the next-prayer target as a Date object (set by updateWidget)
+        let _nextPrayerTarget = null;
+
+        function updateWidget(name, time, diffMin) {
+            document.getElementById('next-prayer-name').innerText = name;
+            document.getElementById('next-prayer-time').innerText = time;
+
+            if (diffMin > 0) {
+                // Calculate exact target time
+                const now = new Date();
+                _nextPrayerTarget = new Date(now.getTime() + diffMin * 60 * 1000);
+                // Align to the prayer's exact minute (strip seconds from the diff)
+                // We set seconds to 0 so the countdown starts from :00
+                _nextPrayerTarget.setSeconds(0, 0);
+            } else {
+                _nextPrayerTarget = null;
+            }
+
+            tickCountdown(); // Immediate tick so no 1s delay on load
+        }
+
+        function tickCountdown() {
+            const pad = n => String(n).padStart(2, '0');
+
+            // Live clock (left side of card)
+            const now = new Date();
+            const clockEl = document.getElementById('live-clock');
+            if (clockEl) {
+                clockEl.innerText = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            }
+
+            // Countdown to next prayer
+            const el = document.getElementById('countdown-text');
+            if (!_nextPrayerTarget) {
+                el.innerText = T[currentLang].endOfDay;
+                return;
+            }
+            const diffMs = _nextPrayerTarget - Date.now();
+            if (diffMs <= 0) {
+                el.innerText = T[currentLang].inPeriod;
+                return;
+            }
+            const totalSec = Math.floor(diffMs / 1000);
+            const hh = Math.floor(totalSec / 3600);
+            const mm = Math.floor((totalSec % 3600) / 60);
+            const ss = totalSec % 60;
+            el.innerText = hh > 0
+                ? `- ${hh}:${pad(mm)}:${pad(ss)}`
+                : `- ${pad(mm)}:${pad(ss)}`;
+        }
+
+        function applyOffset(timeStr, offsetMin) {
+            const [h, m] = timeStr.split(':').map(Number);
+            let total = h * 60 + m + offsetMin;
+            const newH = Math.floor(total / 60) % 24;
+            const newM = total % 60;
+            return `${newH.toString().padStart(2, '0')}:${newM.toString().padStart(2, '0')}`;
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+
+</html>
