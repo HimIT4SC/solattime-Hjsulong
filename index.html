@@ -139,6 +139,23 @@
         }
 
 
+        /* Live clock pulse */
+        @keyframes clockPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.65;
+            }
+        }
+
+        .live-clock {
+            animation: clockPulse 2s ease-in-out infinite;
+        }
+
         /* Animations */
         @keyframes slideUp {
             from {
@@ -236,6 +253,15 @@
                 <button id="theme-toggle" title="Toggle dark/light mode" aria-label="Toggle theme">
                     <span id="theme-icon">🌙</span>
                 </button>
+                <!-- Font size controls -->
+                <div class="flex items-center gap-1">
+                    <button id="font-decrease" title="Decrease text size"
+                        class="w-8 h-8 rounded-full bg-white/50 dark:bg-slate-800/50 backdrop-blur-md border border-slate-200 dark:border-slate-700 text-xs font-bold flex items-center justify-center hover:scale-110 transition-transform"
+                        aria-label="Decrease font size">A−</button>
+                    <button id="font-increase" title="Increase text size"
+                        class="w-8 h-8 rounded-full bg-white/50 dark:bg-slate-800/50 backdrop-blur-md border border-slate-200 dark:border-slate-700 text-sm font-bold flex items-center justify-center hover:scale-110 transition-transform"
+                        aria-label="Increase font size">A+</button>
+                </div>
                 <!-- Location -->
                 <div class="relative">
                     <select id="location-select"
@@ -282,10 +308,15 @@
                     <div class="flex items-end justify-between">
                         <div>
                             <!-- Live current time -->
-                            <p id="live-clock"
-                                class="text-3xl font-bold text-slate-800 dark:text-white tracking-tighter tabular-nums">
-                                --:--:--</p>
-                            <p id="current-date-text" class="text-slate-400 text-xs mt-1">-- --- ----</p>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="w-2 h-2 rounded-full bg-emerald-500 shadow shadow-emerald-400/60 flex-shrink-0"
+                                    style="animation: clockPulse 1.5s ease-in-out infinite;"></span>
+                                <p id="live-clock"
+                                    class="live-clock text-3xl font-bold text-emerald-500 dark:text-emerald-400 tracking-tighter tabular-nums">
+                                    --:--:--</p>
+                            </div>
+                            <p id="current-date-text" class="text-slate-400 text-xs mt-1 ml-4">-- --- ----</p>
                         </div>
                         <div class="text-right flex flex-col items-end gap-2">
                             <!-- Next prayer time (big) -->
@@ -319,6 +350,24 @@
 
         </div><!-- end layout-wrapper -->
 
+        <!-- Monthly Table -->
+        <section class="mt-10 animate-slide-up" style="animation-delay:0.3s;">
+            <div class="flex items-center gap-3 px-1 mb-4">
+                <h3 id="lbl-month-table"
+                    class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest"></h3>
+            </div>
+            <div class="glass-card overflow-x-auto p-0">
+                <table id="month-table" class="w-full text-xs border-collapse min-w-[520px]">
+                    <thead>
+                        <tr id="month-table-head" class="border-b border-slate-200/50 dark:border-slate-700/50">
+                        </tr>
+                    </thead>
+                    <tbody id="month-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <!-- Info Footer -->
         <footer class="mt-12 text-center pb-12 opacity-40 animate-slide-up" style="animation-delay: 0.3s;">
             <p id="desc-text" class="text-[9px] mt-1"></p>
@@ -328,39 +377,17 @@
 
 
     <script>
-        const prayerData = {
-            "settings": {
-                "source": "Time prayer from Patani",
-                "base_location": "Pattani",
-                "description": "Calculated by Haji Sulong Abdulkadir al-Fatani",
-                "location_configs": [
-                    { "id": "pattani", "name_en": "Pattani", "offset": 0 },
-                    { "id": "yala", "name_en": "Yala", "offset": 2 },
-                    { "id": "narathiwat", "name_en": "Narathiwat", "offset": -2 },
-                    { "id": "songkhla", "name_en": "Songkhla", "offset": 1 },
-                    { "id": "satun", "name_en": "Satun", "offset": 4 }
-                ]
-            },
-            "prayer_time": []
-        };
+        let prayerData = null;
 
-        // Populate Mock Data for demonstration
-        for (let i = 1; i <= 31; i++) {
-            prayerData.prayer_time.push({
-                "date": i,
-                "month": "February",
-                "date-month": `${i}-2`,
-                "times": {
-                    "imsak": "05:07",
-                    "subuh": "05:17",
-                    "terbit": "06:30",
-                    "zohor": "12:30",
-                    "asar": "15:49",
-                    "maghrib": "18:29",
-                    "isyak": "19:40"
-                }
+        fetch('https://raw.githubusercontent.com/HimIT4SC/solattime-Hjsulong/main/patani_prayer_times.json')
+            .then(r => r.json())
+            .then(data => {
+                prayerData = data;
+                initApp();
+            })
+            .catch(err => {
+                console.error('Failed to load prayer data:', err);
             });
-        }
 
         /* ── Translations ──────────────────────────────────── */
         const T = {
@@ -430,8 +457,28 @@
             updateUI();
         }
 
+        function initFontSize() {
+            const SIZES = [13, 15, 16, 18, 20]; // px steps
+            let sizeIdx = parseInt(localStorage.getItem('solat-fontsize') ?? '2');
+
+            function applySize() {
+                sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx));
+                document.documentElement.style.fontSize = SIZES[sizeIdx] + 'px';
+                localStorage.setItem('solat-fontsize', sizeIdx);
+                document.getElementById('font-decrease').disabled = (sizeIdx === 0);
+                document.getElementById('font-increase').disabled = (sizeIdx === SIZES.length - 1);
+                document.getElementById('font-decrease').style.opacity = sizeIdx === 0 ? '0.4' : '1';
+                document.getElementById('font-increase').style.opacity = sizeIdx === SIZES.length - 1 ? '0.4' : '1';
+            }
+
+            document.getElementById('font-decrease').addEventListener('click', () => { sizeIdx--; applySize(); });
+            document.getElementById('font-increase').addEventListener('click', () => { sizeIdx++; applySize(); });
+            applySize();
+        }
+
         function initApp() {
             initTheme();
+            initFontSize();
 
             // Language switcher
             const savedLang = localStorage.getItem('solat-lang') || 'th';
@@ -532,7 +579,18 @@
             const currentBanner = document.getElementById('current-prayer-banner');
             currentBanner.classList.add('hidden');
 
-            const allEntries = Object.entries(todayData.times);
+            // JSON stores PM prayers in 12-hour style (e.g. asar:"3:49" → should be 15:49)
+            const PM_PRAYERS = ['asar', 'maghrib', 'isyak'];
+            function normalizePrayerTime(key, timeStr) {
+                const [h, m] = timeStr.split(':').map(Number);
+                const h24 = PM_PRAYERS.includes(key) && h < 12 ? h + 12 : h;
+                return `${String(h24).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            }
+
+            const PRAYER_ORDER = ['imsak', 'subuh', 'terbit', 'zohor', 'asar', 'maghrib', 'isyak'];
+            const allEntries = PRAYER_ORDER
+                .filter(k => todayData.times[k] !== undefined)
+                .map(k => [k, normalizePrayerTime(k, todayData.times[k])]);
 
             // Find next prayer index (first after current time)
             let nextIndex = allEntries.findIndex(([key, timeStr]) => {
@@ -618,6 +676,78 @@
                 }
                 prayerList.appendChild(card);
             });
+
+            // Rebuild month table
+            buildMonthTable(t, offset, now);
+        }
+
+        function buildMonthTable(t, offset, now) {
+            const PRAYER_ORDER = ['imsak', 'subuh', 'terbit', 'zohor', 'asar', 'maghrib', 'isyak'];
+            const PM_PRAYERS = ['asar', 'maghrib', 'isyak'];
+            const monthNum = now.getMonth() + 1;   // 1-based
+            const todayDate = now.getDate();
+
+            // Filter this month's rows from data
+            const monthRows = prayerData.prayer_time.filter(p => {
+                const [, m] = p["date-month"].split('-').map(Number);
+                return m === monthNum;
+            }).sort((a, b) => a.date - b.date);
+
+            if (!monthRows.length) return;
+
+            // Month label (e.g. "February 2026")
+            const monthLabel = now.toLocaleDateString(t.dateLocale, { month: 'long', year: 'numeric' });
+            document.getElementById('lbl-month-table').innerText = monthLabel;
+
+            // Build header
+            const head = document.getElementById('month-table-head');
+            const thBase = 'px-3 py-2.5 text-center font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider whitespace-nowrap';
+            head.innerHTML = `<th class="${thBase} text-left sticky left-0 bg-white/80 dark:bg-slate-900/80 z-10">#</th>`
+                + PRAYER_ORDER.map(k =>
+                    `<th class="${thBase}">${t.prayerNames[k] || k}</th>`
+                ).join('');
+
+            // Build body
+            const tbody = document.getElementById('month-table-body');
+            tbody.innerHTML = '';
+
+            monthRows.forEach(row => {
+                const isToday = row.date === todayDate;
+                const tr = document.createElement('tr');
+                tr.className = isToday
+                    ? 'bg-emerald-500 text-white font-bold'
+                    : 'border-b border-slate-100/60 dark:border-slate-700/40 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors';
+
+                const tdDay = document.createElement('td');
+                tdDay.className = `px-3 py-2 text-left font-bold sticky left-0 z-10 ${isToday ? 'bg-emerald-500 text-white' : 'bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300'
+                    }`;
+                tdDay.textContent = row.date;
+                tr.appendChild(tdDay);
+
+                PRAYER_ORDER.forEach(k => {
+                    const raw = row.times[k];
+                    const td = document.createElement('td');
+                    td.className = `px-3 py-2 text-center tabular-nums ${isToday ? 'text-white' : 'text-slate-700 dark:text-slate-300'}`;
+                    if (raw) {
+                        const [h, m] = raw.split(':').map(Number);
+                        const h24 = PM_PRAYERS.includes(k) && h < 12 ? h + 12 : h;
+                        const ftime = applyOffset(
+                            `${String(h24).padStart(2, '0')}:${String(m).padStart(2, '0')}`,
+                            offset
+                        );
+                        td.textContent = ftime;
+                    } else {
+                        td.textContent = '—';
+                    }
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+
+            // Scroll today into view
+            const todayRow = tbody.querySelector('tr.bg-emerald-500');
+            if (todayRow) todayRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
 
         // Stores the next-prayer target as a Date object (set by updateWidget)
@@ -679,7 +809,7 @@
             return `${newH.toString().padStart(2, '0')}:${newM.toString().padStart(2, '0')}`;
         }
 
-        window.onload = initApp;
+        window.onload = () => { /* initApp is called after fetch completes */ };
     </script>
 </body>
 
