@@ -472,7 +472,7 @@
       "date-month": "1-2",
       "times": {
         "maghrib": "6:26",
-        "isyak": "7:35",
+        "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
         "terbit": "6:34",
@@ -486,7 +486,7 @@
       "date-month": "2-2",
       "times": {
         "maghrib": "6:26",
-        "isyak": "7:35",
+        "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
         "terbit": "6:34",
@@ -500,7 +500,7 @@
       "date-month": "3-2",
       "times": {
         "maghrib": "6:26",
-        "isyak": "7:35",
+        "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
         "terbit": "6:34",
@@ -514,7 +514,7 @@
       "date-month": "4-2",
       "times": {
         "maghrib": "6:26",
-        "isyak": "7:35",
+        "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
         "terbit": "6:34",
@@ -545,7 +545,7 @@
         "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
-        "terbit": "6:33",
+        "terbit": "6:34",
         "zohor": "12:29",
         "asar": "3:50"
       }
@@ -559,7 +559,7 @@
         "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
-        "terbit": "6:33",
+        "terbit": "6:34",
         "zohor": "12:29",
         "asar": "3:50"
       }
@@ -573,7 +573,7 @@
         "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
-        "terbit": "6:33",
+        "terbit": "6:34",
         "zohor": "12:29",
         "asar": "3:50"
       }
@@ -587,7 +587,7 @@
         "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
-        "terbit": "6:33",
+        "terbit": "6:34",
         "zohor": "12:29",
         "asar": "3:50"
       }
@@ -601,7 +601,7 @@
         "isyak": "7:36",
         "imsak": "5:06",
         "subuh": "5:16",
-        "terbit": "6:33",
+        "terbit": "6:34",
         "zohor": "12:29",
         "asar": "3:50"
       }
@@ -613,8 +613,8 @@
       "times": {
         "maghrib": "6:27",
         "isyak": "7:37",
-        "imsak": "5:05",
-        "subuh": "5:15",
+        "imsak": "5:06",
+        "subuh": "5:16",
         "terbit": "6:33",
         "zohor": "12:29",
         "asar": "3:50"
@@ -626,9 +626,9 @@
       "date-month": "12-2",
       "times": {
         "maghrib": "6:27",
-        "isyak": "7:37",
-        "imsak": "5:05",
-        "subuh": "5:15",
+        "isyak": "7:36",
+        "imsak": "5:06",
+        "subuh": "5:16",
         "terbit": "6:33",
         "zohor": "12:29",
         "asar": "3:50"
@@ -640,9 +640,9 @@
       "date-month": "13-2",
       "times": {
         "maghrib": "6:27",
-        "isyak": "7:37",
-        "imsak": "5:05",
-        "subuh": "5:15",
+        "isyak": "7:36",
+        "imsak": "5:06",
+        "subuh": "5:16",
         "terbit": "6:33",
         "zohor": "12:29",
         "asar": "3:50"
@@ -654,9 +654,9 @@
       "date-month": "14-2",
       "times": {
         "maghrib": "6:27",
-        "isyak": "7:37",
-        "imsak": "5:05",
-        "subuh": "5:15",
+        "isyak": "7:36",
+        "imsak": "5:06",
+        "subuh": "5:16",
         "terbit": "6:33",
         "zohor": "12:29",
         "asar": "3:50"
@@ -668,9 +668,9 @@
       "date-month": "15-2",
       "times": {
         "maghrib": "6:27",
-        "isyak": "7:37",
-        "imsak": "5:05",
-        "subuh": "5:15",
+        "isyak": "7:36",
+        "imsak": "5:06",
+        "subuh": "5:16",
         "terbit": "6:33",
         "zohor": "12:29",
         "asar": "3:50"
@@ -681,13 +681,13 @@
       "month": "February",
       "date-month": "16-2",
       "times": {
-        "maghrib": "6:28",
+        "maghrib": "6:29",
         "isyak": "7:37",
-        "imsak": "5:04",
-        "subuh": "5:14",
-        "terbit": "6:32",
+        "imsak": "5:05",
+        "subuh": "5:15",
+        "terbit": "6:31",
         "zohor": "12:29",
-        "asar": "3:49"
+        "asar": "3:50"
       }
     },
     {
@@ -695,13 +695,13 @@
       "month": "February",
       "date-month": "17-2",
       "times": {
-        "maghrib": "6:28",
+        "maghrib": "6:29",
         "isyak": "7:37",
-        "imsak": "5:04",
-        "subuh": "5:14",
-        "terbit": "6:32",
+        "imsak": "5:05",
+        "subuh": "5:15",
+        "terbit": "6:31",
         "zohor": "12:29",
-        "asar": "3:49"
+        "asar": "3:50"
       }
     },
     {
@@ -709,13 +709,13 @@
       "month": "February",
       "date-month": "18-2",
       "times": {
-        "maghrib": "6:28",
+        "maghrib": "6:29",
         "isyak": "7:37",
-        "imsak": "5:04",
-        "subuh": "5:14",
-        "terbit": "6:32",
+        "imsak": "5:05",
+        "subuh": "5:15",
+        "terbit": "6:31",
         "zohor": "12:29",
-        "asar": "3:49"
+        "asar": "3:50"
       }
     },
     {
@@ -723,13 +723,13 @@
       "month": "February",
       "date-month": "19-2",
       "times": {
-        "maghrib": "6:28",
+        "maghrib": "6:29",
         "isyak": "7:37",
-        "imsak": "5:04",
-        "subuh": "5:14",
-        "terbit": "6:32",
+        "imsak": "5:05",
+        "subuh": "5:15",
+        "terbit": "6:31",
         "zohor": "12:29",
-        "asar": "3:49"
+        "asar": "3:50"
       }
     },
     {
@@ -737,13 +737,13 @@
       "month": "February",
       "date-month": "20-2",
       "times": {
-        "maghrib": "6:28",
+        "maghrib": "6:29",
         "isyak": "7:37",
-        "imsak": "5:04",
-        "subuh": "5:14",
-        "terbit": "6:32",
+        "imsak": "5:05",
+        "subuh": "5:15",
+        "terbit": "6:31",
         "zohor": "12:29",
-        "asar": "3:49"
+        "asar": "3:50"
       }
     },
     {
@@ -751,11 +751,11 @@
       "month": "February",
       "date-month": "21-2",
       "times": {
-        "maghrib": "6:29",
+        "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:02",
-        "subuh": "5:12",
-        "terbit": "6:31",
+        "imsak": "5:04",
+        "subuh": "5:14",
+        "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:49"
       }
@@ -765,11 +765,11 @@
       "month": "February",
       "date-month": "22-2",
       "times": {
-        "maghrib": "6:29",
+        "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:02",
-        "subuh": "5:12",
-        "terbit": "6:31",
+        "imsak": "5:04",
+        "subuh": "5:14",
+        "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:49"
       }
@@ -779,11 +779,11 @@
       "month": "February",
       "date-month": "23-2",
       "times": {
-        "maghrib": "6:29",
+        "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:02",
-        "subuh": "5:12",
-        "terbit": "6:31",
+        "imsak": "5:04",
+        "subuh": "5:14",
+        "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:49"
       }
@@ -793,11 +793,11 @@
       "month": "February",
       "date-month": "24-2",
       "times": {
-        "maghrib": "6:29",
+        "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:02",
-        "subuh": "5:12",
-        "terbit": "6:31",
+        "imsak": "5:04",
+        "subuh": "5:14",
+        "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:49"
       }
@@ -807,11 +807,11 @@
       "month": "February",
       "date-month": "25-2",
       "times": {
-        "maghrib": "6:29",
+        "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:02",
-        "subuh": "5:12",
-        "terbit": "6:31",
+        "imsak": "5:04",
+        "subuh": "5:14",
+        "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:49"
       }
@@ -823,8 +823,8 @@
       "times": {
         "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:00",
-        "subuh": "5:10",
+        "imsak": "5:03",
+        "subuh": "5:13",
         "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:48"
@@ -837,8 +837,8 @@
       "times": {
         "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:00",
-        "subuh": "5:10",
+        "imsak": "5:03",
+        "subuh": "5:13",
         "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:48"
@@ -851,11 +851,25 @@
       "times": {
         "maghrib": "6:30",
         "isyak": "7:38",
-        "imsak": "5:00",
-        "subuh": "5:10",
+        "imsak": "5:03",
+        "subuh": "5:13",
         "terbit": "6:30",
         "zohor": "12:29",
         "asar": "3:48"
+      }
+    },
+    {
+      "date": 29,
+      "month": "February",
+      "date-month": "29-2",
+      "times": {
+        "maghrib": "6:30",
+        "isyak": "7:37",
+        "imsak": "5:02",
+        "subuh": "5:12",
+        "terbit": "6:28",
+        "zohor": "12:28",
+        "asar": "3:47"
       }
     },
     {
