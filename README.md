@@ -6,7 +6,7 @@ This is a digital prayer calendar based on the famous historical calculations by
 - **Calculated by:** Haji Sulong Abdulkadir al-Fatani
 - **Center Point:** Pattani (Base Time)
 - **Format:** JSON
-- Extract data by: IT4SC
+- Extract data by: IT4SC X CUCI foundation
 
 ## 📍 Location Adjustments
 If you are not in Pattani, use these simple plus/minus rules:
